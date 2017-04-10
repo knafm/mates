@@ -1,1 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
+/node_modules/
+/npm-debug.log.654431424
+/git
+/dist/bundle.js
+.idea/
+/dist/bundle.js.map

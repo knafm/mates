@@ -83,7 +83,7 @@ class Table extends React.Component<FormProps, FormState> {
                         <td>{matesByGuid[key].name.last}</td>
                         <td>{matesByGuid[key].age}</td>
                         <td>
-                            <a onClick={this.handleEdit(matesByGuid[key].guid).bind(this)}>Edit</a>
+                            <a onClick={this.handleEdit(matesByGuid[key].guid).bind(this)}>Edit </a>
                             <a onClick={this.handleDelete(matesByGuid[key].guid).bind(this)}>Delete</a>
                         </td>
                     </tr>

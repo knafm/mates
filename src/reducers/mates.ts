@@ -9,8 +9,10 @@ export default function matesReducer(state = INITIAL_STATE, action: Action ){
     const {type, payload} = action;
     switch (type){
         case actionTypes.ADD_MATE:
-            console.log(payload);
             return state.set(payload.guid,{...payload.info,guid:payload.guid});
+        case actionTypes.EDIT_MATE:
+            console.log(payload);
+            return state.set(payload.guid,{...payload});
         case actionTypes.DELETE_MATE:
             return state.delete(payload.guid);
         case actionTypes.LOAD_DATA:

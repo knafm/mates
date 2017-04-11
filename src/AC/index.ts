@@ -1,4 +1,4 @@
-import {LOAD_DATA,DELETE_MATE, ADD_MATE} from "../constants/index";
+import {LOAD_DATA,DELETE_MATE, ADD_MATE, EDIT_MATE} from "../constants/index";
 import {Action} from "../interfaces/index";
 
 export function loadData():Action {
@@ -29,6 +29,23 @@ export function addMate(info: any,genID:boolean ):{type: string ,payload: object
                 },
                 age: info.age
             }
+
+
+        }
+    }
+}
+export function editMate(editing: string,firstName: string,lastName:string,age: number ):{type: string ,payload: object} {
+    return {
+        type: EDIT_MATE,
+        payload: {
+                guid: editing,
+                name:{
+                    first:firstName,
+                    last: lastName,
+                },
+
+                age
+
 
 
         }

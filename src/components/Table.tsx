@@ -4,11 +4,14 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import {loadData} from "../AC/index"
+import {deleteMate} from "../AC/index"
 
 export interface FormProps {
     loadData: () => void;
     state: any;
     matesByGuid: any;
+    handleDelete: (guid:string) => void;
+    deleteMate: (guid:string) => void;
 }
 
 
@@ -16,6 +19,10 @@ class Table extends React.Component<FormProps, undefined> {
     constructor() {
         super();
     }
+    handleDelete =(guid: string)=>(ev:React.FormEvent<any>)=>{
+        ev.preventDefault();
+        this.props.deleteMate(guid);
+    };
 
     componentDidMount() {
         /**
@@ -35,7 +42,7 @@ class Table extends React.Component<FormProps, undefined> {
                 <td>{matesByGuid[key].name.first}</td>
                 <td>{matesByGuid[key].name.last}</td>
                 <td>{matesByGuid[key].age}</td>
-                <td><a>Edit</a> <a>Delete</a></td>
+                <td><a>Edit</a> <a onClick={this.handleDelete(matesByGuid[key].guid).bind(this)}>Delete</a></td>
             </tr>)
         }
 
@@ -64,5 +71,5 @@ class Table extends React.Component<FormProps, undefined> {
 export default connect((state) => {
         return {matesByGuid: state.matesReducer.toJS()}
     }
-    , {loadData}
+    , {loadData,deleteMate}
 )(Table)

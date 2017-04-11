@@ -39,7 +39,6 @@ class Form extends React.Component<FormProps, FormState>  {
 
     render() {
         return (
-
             <div className="col-lg-3">
                 <form onSubmit={this.submitHandler.bind(this)}>
                     <div className="form-group">

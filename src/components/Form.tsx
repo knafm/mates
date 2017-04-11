@@ -4,6 +4,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import {addMate} from "../AC/index"
+import {ageCheck,nameCheck} from "../libs/valid";
 
 export interface FormProps {
     addMate: (info: object,genID:boolean) => void,
@@ -28,7 +29,9 @@ class Form extends React.Component<FormProps, FormState>  {
 
     submitHandler = (ev: React.FormEvent<any>) => {
         ev.preventDefault();
-        this.props.addMate(this.state,true)
+        const{lastName,age,firstName} = this.state;
+        (nameCheck(lastName)&&nameCheck(firstName)&&ageCheck(age))?
+            this.props.addMate(this.state,true) : console.log("unvalid");
     };
 
     handleChange = (field : any) => (ev: React.FormEvent<any>) => {

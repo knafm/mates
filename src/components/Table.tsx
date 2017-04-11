@@ -3,9 +3,10 @@
  */
 import * as React from "react";
 import {connect} from "react-redux";
-import {loadData} from "../AC/index"
-import {deleteMate} from "../AC/index"
-import {editMate} from "../AC/index"
+import {loadData} from "../AC/index";
+import {deleteMate} from "../AC/index";
+import {editMate} from "../AC/index";
+import {ageCheck,nameCheck} from "../libs/valid";
 
 export interface FormProps {
     loadData: () => void;
@@ -45,7 +46,8 @@ class Table extends React.Component<FormProps, FormState> {
     handleEditCommit = (guid: string) => (ev: React.FormEvent<any>) => {
         ev.preventDefault();
         const {firstName,lastName,age} = this.state;
-        this.props.editMate(guid,firstName,lastName,age);
+        (nameCheck(lastName)&&nameCheck(firstName)&&ageCheck(age))?
+            this.props.editMate(guid,firstName,lastName,age) : console.log("unvalid");
         this.setState({
             editing: "",
             firstName: "",

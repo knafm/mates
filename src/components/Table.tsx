@@ -1,6 +1,3 @@
-/**
- * Created by KNA on 10.04.2017.
- */
 import * as React from "react";
 import {connect} from "react-redux";
 import {loadData} from "../AC/index";
@@ -16,12 +13,13 @@ export interface FormProps {
     deleteMate: (guid: string) => void;
     editMate: (guid: string,firstName: string,lastName:string,age: number) => void;
 }
+
 export interface FormState {
     editing: string;
     firstName: string;
     lastName:string;
     age: number;
-
+    error: boolean;
 }
 
 class Table extends React.Component<FormProps, FormState> {
@@ -31,7 +29,8 @@ class Table extends React.Component<FormProps, FormState> {
             editing: "",
             firstName: "",
             lastName:"",
-            age:0
+            age:0,
+            error:false
         }
     }
 
@@ -47,7 +46,7 @@ class Table extends React.Component<FormProps, FormState> {
         ev.preventDefault();
         const {firstName,lastName,age} = this.state;
         (nameCheck(lastName)&&nameCheck(firstName)&&ageCheck(age))?
-            this.props.editMate(guid,firstName,lastName,age) : console.log("unvalid");
+            this.props.editMate(guid,firstName,lastName,age) : this.setState({error:true});
         this.setState({
             editing: "",
             firstName: "",
@@ -62,7 +61,7 @@ class Table extends React.Component<FormProps, FormState> {
 
     };
     componentDidUpdate(){
-        console.log(this.state)
+        (this.state.error)? setTimeout(this.setState.bind(this),2000,{error:false}):null;
     }
     componentDidMount() {
         /**
@@ -72,7 +71,7 @@ class Table extends React.Component<FormProps, FormState> {
     }
 
     render() {
-        // console.log(this.props.matesByGuid);
+        const error = (this.state.error)? <div className="alert alert-danger">Форма не валидна</div> : null;
         let Rows = [];
         const {matesByGuid} = this.props;
         let number = 0;
@@ -118,7 +117,8 @@ class Table extends React.Component<FormProps, FormState> {
 
         return (
 
-            <div className="col-lg-6">
+            <div className="col-lg-7">
+                {error}
                 <table className="table table-hover">
                     <thead>
                     <tr>

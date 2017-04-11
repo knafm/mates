@@ -1,6 +1,3 @@
-/**
- * Created by KNA on 10.04.2017.
- */
 import * as React from "react";
 import {connect} from "react-redux";
 import {addMate} from "../AC/index"
@@ -10,10 +7,12 @@ export interface FormProps {
     addMate: (info: object,genID:boolean) => void,
     setState: (state:object)=> void
 }
+
 export interface FormState {
     firstName: string,
     lastName: string,
-    age: number
+    age: number,
+    error:boolean,
 }
 
 class Form extends React.Component<FormProps, FormState>  {
@@ -23,7 +22,8 @@ class Form extends React.Component<FormProps, FormState>  {
         this.state = {
             firstName: '',
             lastName: '',
-            age: 0
+            age: 0,
+            error: false
         }
     }
 
@@ -31,7 +31,7 @@ class Form extends React.Component<FormProps, FormState>  {
         ev.preventDefault();
         const{lastName,age,firstName} = this.state;
         (nameCheck(lastName)&&nameCheck(firstName)&&ageCheck(age))?
-            this.props.addMate(this.state,true) : console.log("unvalid");
+            this.props.addMate(this.state,true) : this.setState({error:true});
     };
 
     handleChange = (field : any) => (ev: React.FormEvent<any>) => {
@@ -39,8 +39,12 @@ class Form extends React.Component<FormProps, FormState>  {
             [field]: ev.currentTarget.value
         })
     };
+    componentDidUpdate(){
+        (this.state.error)? setTimeout(this.setState.bind(this),2000,{error:false}):null;
+    }
 
     render() {
+        const error = (this.state.error)? <div className="alert alert-danger">Форма не валидна</div> : null;
         return (
             <div className="col-lg-3">
                 <form onSubmit={this.submitHandler.bind(this)}>
@@ -61,6 +65,7 @@ class Form extends React.Component<FormProps, FormState>  {
                     </div>
                     <button type="submit" className="btn btn-default">Создать</button>
                 </form>
+                {error}
             </div>
         );
     }

@@ -11,7 +11,6 @@ export default function matesReducer(state = INITIAL_STATE, action: Action ){
         case actionTypes.ADD_MATE:
             return state.set(payload.guid,{...payload.info,guid:payload.guid});
         case actionTypes.EDIT_MATE:
-            console.log(payload);
             return state.set(payload.guid,{...payload});
         case actionTypes.DELETE_MATE:
             return state.delete(payload.guid);

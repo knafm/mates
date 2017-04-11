@@ -1,5 +1,5 @@
 import {START, SUCCESS, FAIL}from "../constants";
-import {Action} from "../interfaces/index"
+import {Action} from "../interfaces/index";
 
 export default (store: any) => (next: any) => (action: Action) => {
     const {payload} = action;
@@ -13,8 +13,9 @@ export default (store: any) => (next: any) => (action: Action) => {
                 next({payload: {data: JSON.parse(data)}, type: action.type + SUCCESS})
             })
         }).catch((err) => {
-            //ошибка, передаем , дальше можно складировать в лог , к примеру.
-            //todo  Не обрабатывается action.type+FAIL
+            /**
+             * Если ошибка, передаем , дальше можно складировать в лог , к примеру.
+             */
             next({payload: {err: err}, type: action.type + FAIL})
         });
 

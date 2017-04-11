@@ -1,6 +1,3 @@
-/**
- * Created by KNA on 10.04.2017.
- */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {Provider} from "react-redux";

@@ -30,7 +30,6 @@ export function addMate(info: any,genID:boolean ):{type: string ,payload: object
                 age: info.age
             }
 
-
         }
     }
 }
@@ -43,11 +42,7 @@ export function editMate(editing: string,firstName: string,lastName:string,age: 
                     first:firstName,
                     last: lastName,
                 },
-
                 age
-
-
-
         }
     }
 }

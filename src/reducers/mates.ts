@@ -4,12 +4,13 @@ import * as actionTypes from "../constants/index";
 import {Action} from "../interfaces/index";
 
 const INITIAL_STATE = Map({});
-//todo расписать где нибудь интерфейс action
+
 export default function matesReducer(state = INITIAL_STATE, action: Action ){
     const {type, payload} = action;
     switch (type){
         case actionTypes.ADD_MATE:
-            return state.set(payload.guid,payload.info);
+            console.log(payload);
+            return state.set(payload.guid,{...payload.info,guid:payload.guid});
         case actionTypes.DELETE_MATE:
             return state.delete(payload.guid);
         case actionTypes.LOAD_DATA:

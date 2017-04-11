@@ -13,8 +13,7 @@
     "react-redux": "^5.0.4",
     "redux": "^3.6.0",
     "source-map-loader": "^0.2.1",
-    "typescript": "^2.2.2",
-    "unique-string": "^1.0.0"
+    "typescript": "^2.2.2"
   },
   "devDependencies": {
     "browser-sync": "^2.18.8",

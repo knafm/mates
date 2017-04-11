@@ -1,5 +1,6 @@
 import {START, SUCCESS, FAIL}from "../constants";
 import {Action} from "../interfaces/index"
+
 export default (store: any) => (next: any) => (action: Action) => {
     const {payload} = action;
     if (payload.hasOwnProperty("callAPI")) {

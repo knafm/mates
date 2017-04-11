@@ -5,3 +5,4 @@
 /dist/bundle.js
 .idea/
 /dist/bundle.js.map
+/npm-debug.log

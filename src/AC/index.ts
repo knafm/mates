@@ -17,11 +17,20 @@ export function deleteMate(guid: string):{type: string ,payload: object} {
         }
     }
 }
-export function addMate(info: object):{type: string ,payload: object} {
+export function addMate(info: any,genID:boolean ):{type: string ,payload: object} {
     return {
         type: ADD_MATE,
         payload: {
-            info: info
+            genID,
+            info:{
+                name: {
+                    first: info.firstName,
+                    last : info.lastName
+                },
+                age: info.age
+            }
+
+
         }
     }
 }

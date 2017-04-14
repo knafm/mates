@@ -1,4 +1,3 @@
-//todo тест, дальше через пропсы
 import {observable, autorun, IObservableArray} from "mobx";
 
 export interface IMate{
@@ -11,7 +10,6 @@ export interface IMate{
     email?: string;
 }
 
-// todo описать интерфейс mobxStore ??
 class mobxStore {
     @observable mates : IObservableArray<IMate> = observable.array([]);
 

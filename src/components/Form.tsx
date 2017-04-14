@@ -3,6 +3,7 @@ import {observer} from "mobx-react";
 import Guid from "../libs/uuid";
 import {IObservableArray} from "mobx";
 import {IMate} from "../store/mobxStore";
+import {ageCheck, nameCheck} from "../libs/valid";
 
 export interface FormProps {
     mobxStore: {
@@ -35,16 +36,25 @@ class Form extends React.Component<FormProps, FormState> {
         ev.preventDefault();
         let {mates} = this.props.mobxStore;
         const {lastName, age, firstName} = this.state;
+        if (nameCheck(lastName) && nameCheck(firstName) && ageCheck(age)) {
+            mates.push({
+                age: age,
+                name: {
+                    first: firstName,
+                    last: lastName
+                },
+                guid: Guid.newGuid()
 
-        mates.push({
-           age: age,
-           name:{
-               first: firstName,
-               last: lastName
-           },
-            guid: Guid.newGuid()
-
-        })
+            });
+            this.setState({
+                error: false,
+                firstName: "",
+                lastName: "",
+                age: 0,
+            })
+        } else {
+            this.setState({error: true})
+        }
     };
 
     handleChange = (field: any) => (ev: React.FormEvent<HTMLInputElement>) => {
@@ -52,10 +62,7 @@ class Form extends React.Component<FormProps, FormState> {
             [field]: ev.currentTarget.value
         })
     };
-// todo setTimeout ?
-    componentDidUpdate() {
-        (this.state.error) ? setTimeout(this.setState.bind(this), 2000, {error: false}) : null;
-    }
+
 
     render() {
         const error = (this.state.error) ? <div className="alert alert-danger">Форма не валидна</div> : null;

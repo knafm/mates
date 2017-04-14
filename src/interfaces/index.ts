@@ -12,8 +12,4 @@ export interface Action {
     type:string;
 }
 
-//todo расписать в каком виде у нас хранятся mates
-export interface Imates {
-
-}
 

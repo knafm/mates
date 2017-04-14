@@ -51,7 +51,7 @@ class Table extends React.Component<FormProps, FormState> {
         ev.preventDefault();
         const {firstName, lastName, age} = this.state;
         const {mates} = this.props.mobxStore;
-        (nameCheck(lastName) && nameCheck(firstName) && ageCheck(age)) ?
+        if (nameCheck(lastName) && nameCheck(firstName) && ageCheck(age)) {
             mates[index] = {
                 age: age,
                 name: {
@@ -59,13 +59,18 @@ class Table extends React.Component<FormProps, FormState> {
                     last: lastName
                 },
                 guid: mates[index].guid
-            } : this.setState({error: true});
-        this.setState({
-            editing: "",
-            firstName: "",
-            lastName: "",
-            age: 0
-        });
+            };
+            this.setState({
+                error: false,
+                editing: "",
+                firstName: "",
+                lastName: "",
+                age: 0
+            });
+        } else {
+            this.setState({error: true});
+        }
+
     };
     handleChange = (field: any) => (ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
@@ -73,10 +78,6 @@ class Table extends React.Component<FormProps, FormState> {
         });
 
     };
-    // todo setTimeout ?
-    componentDidUpdate() {
-        (this.state.error) ? setTimeout(this.setState.bind(this), 2000, {error: false}) : null;
-    }
 
     componentDidMount() {
         /**

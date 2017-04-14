@@ -1,119 +1,134 @@
 import * as React from "react";
-import {connect} from "react-redux";
-import {loadData} from "../AC/index";
-import {deleteMate} from "../AC/index";
-import {editMate} from "../AC/index";
-import {ageCheck,nameCheck} from "../libs/valid";
+import {ageCheck, nameCheck} from "../libs/valid";
+import {IObservableArray} from "mobx";
+import {IMate} from "../store/mobxStore";
+import {observer} from "mobx-react"
 
 export interface FormProps {
-    loadData: () => void;
-    state: any;
-    matesByGuid: any;
-    handleDelete: (guid: string) => void;
-    deleteMate: (guid: string) => void;
-    editMate: (guid: string,firstName: string,lastName:string,age: number) => void;
+    mobxStore: {
+        mates: IObservableArray<IMate>;
+    };
 }
 
 export interface FormState {
     editing: string;
     firstName: string;
-    lastName:string;
+    lastName: string;
     age: number;
     error: boolean;
 }
 
+@observer
 class Table extends React.Component<FormProps, FormState> {
     constructor() {
         super();
         this.state = {
             editing: "",
             firstName: "",
-            lastName:"",
-            age:0,
-            error:false
+            lastName: "",
+            age: 0,
+            error: false
         }
     }
 
-    handleDelete = (guid: string) => (ev: React.FormEvent<any>) => {
+    handleDelete = (index: number) => (ev: React.FormEvent<HTMLInputElement>) => {
         ev.preventDefault();
-        this.props.deleteMate(guid);
+        this.props.mobxStore.mates.splice(index, 1);
     };
-    handleEdit = (guid: string) => (ev: React.FormEvent<any>) => {
+    handleEdit = (guid: string, firstName: string, lastName: string, age: number) => (ev: React.FormEvent<HTMLInputElement>) => {
         ev.preventDefault();
-        this.setState({editing: guid});
+        console.log(lastName);
+        console.log(age);
+
+        this.setState({
+            editing: guid,
+            firstName: firstName,
+            lastName: lastName,
+            age: age
+        });
     };
-    handleEditCommit = (guid: string) => (ev: React.FormEvent<any>) => {
+    handleEditCommit = (index: number) => (ev: React.FormEvent<HTMLInputElement>) => {
         ev.preventDefault();
-        const {firstName,lastName,age} = this.state;
-        (nameCheck(lastName)&&nameCheck(firstName)&&ageCheck(age))?
-            this.props.editMate(guid,firstName,lastName,age) : this.setState({error:true});
+        const {firstName, lastName, age} = this.state;
+        const {mates} = this.props.mobxStore;
+        (nameCheck(lastName) && nameCheck(firstName) && ageCheck(age)) ?
+            mates[index] = {
+                age: age,
+                name: {
+                    first: firstName,
+                    last: lastName
+                },
+                guid: mates[index].guid
+            } : this.setState({error: true});
         this.setState({
             editing: "",
             firstName: "",
-            lastName:"",
-            age:0
+            lastName: "",
+            age: 0
         });
     };
-    handleChange = (field: any) => (ev: React.FormEvent<any>) => {
+    handleChange = (field: any) => (ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
             [field]: ev.currentTarget.value
         });
 
     };
-    componentDidUpdate(){
-        (this.state.error)? setTimeout(this.setState.bind(this),2000,{error:false}):null;
+    // todo setTimeout ?
+    componentDidUpdate() {
+        (this.state.error) ? setTimeout(this.setState.bind(this), 2000, {error: false}) : null;
     }
+
     componentDidMount() {
         /**
          * Грузим начальные значения в store из api (из json который лежит в /api/mates.json)
          */
-        this.props.loadData();
+        // this.props.loadData();
     }
 
     render() {
-        const error = (this.state.error)? <div className="alert alert-danger">Форма не валидна</div> : null;
-        let Rows = [];
-        const {matesByGuid} = this.props;
-        let number = 0;
-        for (let key in matesByGuid) {
-            if (key !== this.state.editing) {
+        const error = (this.state.error) ? <div className="alert alert-danger">Форма не валидна</div> : null;
+        let Rows: object[] = [];
+        const {mates} = this.props.mobxStore;
+        mates.forEach((item: IMate, i) => {
+            if (item.guid !== this.state.editing) {
                 Rows.push(
-                    <tr key={matesByGuid[key].guid}>
-                        <td>{number++}</td>
-                        <td>{matesByGuid[key].name.first}</td>
-                        <td>{matesByGuid[key].name.last}</td>
-                        <td>{matesByGuid[key].age}</td>
+                    <tr key={item.guid}>
+                        <td>{i}</td>
+                        <td>{item.name.first}</td>
+                        <td>{item.name.last}</td>
+                        <td>{item.age}</td>
                         <td>
-                            <a onClick={this.handleEdit(matesByGuid[key].guid).bind(this)}>Edit </a>
-                            <a onClick={this.handleDelete(matesByGuid[key].guid).bind(this)}>Delete</a>
+                            <a onClick={this.handleEdit(item.guid, item.name.first, item.name.last, item.age)
+                                .bind(this)}>Edit </a>
+                            <a onClick={this.handleDelete(i).bind(this)}>Delete</a>
                         </td>
                     </tr>
                 )
             } else {
                 Rows.push(
-                    <tr key={matesByGuid[key].guid}>
-                        <td>{number++}</td>
+                    <tr key={item.guid}>
+                        <td>{i}</td>
                         <td>
-                            <input className="form-control" id="firstName" placeholder={matesByGuid[key].name.first}
+                            <input className="form-control" id="firstName" value={this.state.firstName}
                                    onChange={this.handleChange('firstName').bind(this)}/>
                         </td>
                         <td>
-                            <input className="form-control" id="lastName" placeholder={matesByGuid[key].name.last}
+                            <input className="form-control" id="lastName" value={this.state.lastName}
                                    onChange={this.handleChange('lastName').bind(this)}/>
                         </td>
 
                         <td>
-                            <input type="number" className="form-control" id="age" placeholder={matesByGuid[key].age}
+                            <input type="number" className="form-control" id="age" value={this.state.age.toString()}
                                    onChange={this.handleChange('age').bind(this)}/>
                         </td>
                         <td>
-                            <a onClick={this.handleEditCommit(matesByGuid[key].guid).bind(this)}>Commit</a>
+                            <a onClick={this.handleEditCommit(i).bind(this)}>Commit</a>
                         </td>
                     </tr>
                 )
             }
+        });
 
-        }
 
         return (
 
@@ -138,8 +153,4 @@ class Table extends React.Component<FormProps, FormState> {
     }
 }
 
-export default connect((state) => {
-        return {matesByGuid: state.matesReducer.toJS()}
-    }
-    , {loadData, deleteMate, editMate}
-)(Table)
+export default Table

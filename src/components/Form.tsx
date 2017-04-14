@@ -1,49 +1,58 @@
 import * as React from "react";
-import {connect} from "react-redux";
-import {addMate} from "../AC/index"
-import {ageCheck, nameCheck} from "../libs/valid";
+import {observer} from "mobx-react";
+import Guid from "../libs/uuid";
+import {IObservableArray} from "mobx";
+import {IMate} from "../store/mobxStore";
 
 export interface FormProps {
-    addMate: (info: object, genID: boolean) => void,
-    setState: (state: object) => void
+    mobxStore: {
+        mates: IObservableArray<IMate>;
+    };
 }
 
 export interface FormState {
-    firstName: string,
-    lastName: string,
-    age: number,
-    error: boolean,
+    firstName: string;
+    lastName: string;
+    age: number;
+    error: boolean;
+
 }
 
+@observer
 class Form extends React.Component<FormProps, FormState> {
-    constructor() {
-        super();
+    constructor(props: FormProps) {
+        super(props);
 
         this.state = {
-            firstName: '',
-            lastName: '',
+            firstName: "",
+            lastName: "",
             age: 0,
-            error: false
-        }
+            error: false,
+        };
     }
 
-    submitHandler = (ev: React.FormEvent<any>) => {
+    submitHandler = (ev: React.FormEvent<HTMLInputElement>) => {
         ev.preventDefault();
+        let {mates} = this.props.mobxStore;
         const {lastName, age, firstName} = this.state;
-        if (nameCheck(lastName) && nameCheck(firstName) && ageCheck(age)) {
-            this.props.addMate(this.state, true);
-            this.setState({firstName: '',lastName: '',age: 0})
-        } else {
-            this.setState({error: true});
-        }
+
+        mates.push({
+           age: age,
+           name:{
+               first: firstName,
+               last: lastName
+           },
+            guid: Guid.newGuid()
+
+        })
     };
 
-    handleChange = (field: any) => (ev: React.FormEvent<any>) => {
+    handleChange = (field: any) => (ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
             [field]: ev.currentTarget.value
         })
     };
-
+// todo setTimeout ?
     componentDidUpdate() {
         (this.state.error) ? setTimeout(this.setState.bind(this), 2000, {error: false}) : null;
     }
@@ -76,4 +85,4 @@ class Form extends React.Component<FormProps, FormState> {
     }
 }
 
-export default connect(null, {addMate})(Form)
+export default Form

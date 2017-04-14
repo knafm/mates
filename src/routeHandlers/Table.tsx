@@ -2,7 +2,7 @@ import * as React from "react";
 import Table from "../components/Table";
 import {mobx} from "../store/mobxStore";
 
-class TableHandler extends React.Component<any, any> {
+class TableHandler extends React.Component<void, void> {
     render() {
         return (
             <div>

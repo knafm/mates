@@ -11,11 +11,11 @@ export interface FormProps {
 }
 
 export interface FormState {
-    editing: string;
-    firstName: string;
-    lastName: string;
-    age: number;
-    error: boolean;
+    editing?: string;
+    firstName?: string;
+    lastName?: string;
+    age?: number;
+    error?: boolean;
 }
 
 @observer
@@ -72,7 +72,7 @@ class Table extends React.Component<FormProps, FormState> {
         }
 
     };
-    handleChange = (field: any) => (ev: React.FormEvent<HTMLInputElement>) => {
+    handleChange = (field: string) => (ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
             [field]: ev.currentTarget.value
         });
@@ -111,16 +111,16 @@ class Table extends React.Component<FormProps, FormState> {
                         <td>{i}</td>
                         <td>
                             <input className="form-control" id="firstName" value={this.state.firstName}
-                                   onChange={this.handleChange('firstName').bind(this)}/>
+                                   onChange={this.handleChange("firstName").bind(this)}/>
                         </td>
                         <td>
                             <input className="form-control" id="lastName" value={this.state.lastName}
-                                   onChange={this.handleChange('lastName').bind(this)}/>
+                                   onChange={this.handleChange("lastName").bind(this)}/>
                         </td>
 
                         <td>
                             <input type="number" className="form-control" id="age" value={this.state.age.toString()}
-                                   onChange={this.handleChange('age').bind(this)}/>
+                                   onChange={this.handleChange("age").bind(this)}/>
                         </td>
                         <td>
                             <a onClick={this.handleEditCommit(i).bind(this)}>Commit</a>

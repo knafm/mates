@@ -12,12 +12,13 @@ export interface FormProps {
 }
 
 export interface FormState {
-    firstName: string;
-    lastName: string;
-    age: number;
-    error: boolean;
+    firstName?: string;
+    lastName?: string;
+    age?: number;
+    error?: boolean;
 
 }
+
 
 @observer
 class Form extends React.Component<FormProps, FormState> {
@@ -30,6 +31,8 @@ class Form extends React.Component<FormProps, FormState> {
             age: 0,
             error: false,
         };
+
+
     }
 
     submitHandler = (ev: React.FormEvent<HTMLInputElement>) => {
@@ -57,7 +60,7 @@ class Form extends React.Component<FormProps, FormState> {
         }
     };
 
-    handleChange = (field: any) => (ev: React.FormEvent<HTMLInputElement>) => {
+    handleChange = (field: string) => (ev: React.FormEvent<HTMLInputElement>) => {
         this.setState({
             [field]: ev.currentTarget.value
         })
@@ -72,17 +75,17 @@ class Form extends React.Component<FormProps, FormState> {
                     <div className="form-group">
                         <label htmlFor="firstName">First Name</label>
                         <input className="form-control" id="firstName" placeholder="First Name"
-                               onChange={this.handleChange('firstName').bind(this)} value={this.state.firstName}/>
+                               onChange={this.handleChange("firstName").bind(this)} value={this.state.firstName}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="lastName">Last Name</label>
                         <input className="form-control" id="lastName" placeholder="Last Name"
-                               onChange={this.handleChange('lastName').bind(this)} value={this.state.lastName}/>
+                               onChange={this.handleChange("lastName").bind(this)} value={this.state.lastName}/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="age">Age</label>
                         <input type="number" className="form-control" id="age" placeholder="age"
-                               onChange={this.handleChange('age').bind(this)} value={this.state.age}/>
+                               onChange={this.handleChange("age").bind(this)} value={this.state.age}/>
                     </div>
                     <button type="submit" className="btn btn-default">Создать</button>
                 </form>

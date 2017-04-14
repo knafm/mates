@@ -1,6 +1,6 @@
 import * as React from "react";
 import {ageCheck, nameCheck} from "../libs/valid";
-import {IObservableArray} from "mobx";
+import {IObservableArray, action} from "mobx";
 import {IMate} from "../store/mobxStore";
 import {observer} from "mobx-react"
 
@@ -47,6 +47,7 @@ class Table extends React.Component<FormProps, FormState> {
             age: age
         });
     };
+
     handleEditCommit = (index: number) => (ev: React.FormEvent<HTMLInputElement>) => {
         ev.preventDefault();
         const {firstName, lastName, age} = this.state;
@@ -79,11 +80,13 @@ class Table extends React.Component<FormProps, FormState> {
 
     };
 
+
+
     componentDidMount() {
         /**
          * Грузим начальные значения в store из api (из json который лежит в /api/mates.json)
          */
-        // this.props.loadData();
+        // this.loadData('/api/mates.json');
     }
 
     render() {

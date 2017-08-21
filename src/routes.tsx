@@ -13,6 +13,7 @@ export default (
 
             <Route exact path="/" component={FormHandler}/>
             <Route path="/table" component={TableHandler}/>
+            <Route path="/table" />
 
         </div>
     </BrowserRouter>
